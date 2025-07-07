@@ -6,6 +6,7 @@ const cors = require('cors');
 const connectDB = require('./config/db');
 const path = require('path');
 require('dotenv').config();
+const eventRoutes = require('./routes/eventRoutes');
 
 const app = express();
 
@@ -20,6 +21,8 @@ app.use('/api/admin', require('./routes/adminRoutes'));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 app.use('/api/events', require('./routes/eventRoutes'));
+
+app.use('/api', eventRoutes);
 
 
 const PORT = process.env.PORT || 5000;

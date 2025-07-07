@@ -7,10 +7,12 @@ import Login from "./pages/login.js";
 import Profile from "./pages/profile.js";
 import UserRoutes from "./components/UserRoutes.js";
 import AdminDashboard from "./pages/AdminDashboard.js";
-import AdminRoutes from "./components/AdminRoutes.js";
+// import AdminRoutes from "./components/AdminRoutes.js";
 import CalendarPage from "./pages/CalendarPage.js";
 import AdminStats from "./pages/AdminStats.js";
 import AdminLayout from "./components/AdminLayout.js";
+import ManageEvents from "./pages/ManageEvents.js";
+import EventDetails from "./pages/EventDetails.js";
 
 
 function App() {
@@ -32,9 +34,11 @@ function App() {
           <Route path="dashboard" element={<AdminStats />} />
           <Route path="add-event" element={<AdminDashboard />} />
           {/* <Route path="approve-events" element={<ApproveEvents />} /> */}
-          {/* <Route path="manage-events" element={<ManageEvents />} /> */}
+          <Route path="manage-events" element={<ManageEvents />} />
           {/* <Route path="manage-users" element={<ManageUsers />} /> */}
         </Route>
+        <Route path="/event/:id" element={<EventDetails />} />
+
       </Routes>
     </Router>
   );
