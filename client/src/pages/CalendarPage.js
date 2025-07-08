@@ -42,7 +42,7 @@ const CalendarPage = () => {
         <ul className="list-disc list-inside text-sm text-gray-800">
           {events.map((event, index) => (
             <li key={index}>
-              <strong>{event.title}</strong> – {event.description} in {event.district}
+              <strong>{event.title}</strong> – {event.time} in {event.district}
             </li>
           ))}
         </ul>

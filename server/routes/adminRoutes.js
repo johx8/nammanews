@@ -6,7 +6,10 @@ const {
   getAdminStats,
   getAllEvents,
   deleteEvents,
-  updateEvent
+  updateEvent,
+  getAllUsers,
+  deleteUser,
+  updateUserRole
 } = require('../controllers/adminController');
 
 // Routes
@@ -17,6 +20,9 @@ router.get('/events', getAllEvents);
 router.delete('/events/:id', deleteEvents);
 router.put('/events/:id', updateEvent);
 
+router.get('/users', getAllUsers);
+router.delete('/users/:id', deleteUser);
+router.put('/users/:id/role', updateUserRole);
 // router.get('/events/count', adminController.getEventCount);
 // router.get('/users/count', adminController.getUserCount);
 

@@ -13,6 +13,7 @@ import AdminStats from "./pages/AdminStats.js";
 import AdminLayout from "./components/AdminLayout.js";
 import ManageEvents from "./pages/ManageEvents.js";
 import EventDetails from "./pages/EventDetails.js";
+import ManageUsers from "./pages/ManageUser.js";
 
 
 function App() {
@@ -35,7 +36,7 @@ function App() {
           <Route path="add-event" element={<AdminDashboard />} />
           {/* <Route path="approve-events" element={<ApproveEvents />} /> */}
           <Route path="manage-events" element={<ManageEvents />} />
-          {/* <Route path="manage-users" element={<ManageUsers />} /> */}
+          <Route path="manage-users" element={<ManageUsers />} />
         </Route>
         <Route path="/event/:id" element={<EventDetails />} />
 
