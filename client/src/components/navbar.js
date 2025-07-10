@@ -49,7 +49,7 @@ export default function Navbar() {
 
         {userName ? (
           <>
-            <Link to={role === 'admin' ? "/admin/dashboard" : "/profile"} className="opts font-semibold">Hi, {userName}</Link>
+            <Link to={role === 'admin' ? "/admin/dashboard" : "/user/profile"} className="opts font-semibold">Hi, {userName}</Link>
             {/* {role === 'admin' && (
               <Link to="/admin/dashboard" className="opts text-orange-600 font-semibold">Admin Dashboard</Link>
             )} */}

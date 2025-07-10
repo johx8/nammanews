@@ -38,6 +38,15 @@ const eventSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
+  createdBy: {
+  type: mongoose.Schema.Types.ObjectId,
+  ref: 'User',
+  required: true
+},
+approved: {
+  type: Boolean,
+  default: false
+},
   redirectUrl: {
     type: String,
     default: '',
