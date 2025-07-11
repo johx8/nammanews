@@ -9,6 +9,9 @@ require('dotenv').config();
 const eventRoutes = require('./routes/eventRoutes');
 const userRoutes = require('./routes/userRoutes');
 
+const swaggerUi = require('swagger-ui-express');
+const swaggerSpec = require('./swaggerConfig');
+
 const app = express();
 
 app.use(cors());
@@ -26,6 +29,9 @@ app.use('/api/events', require('./routes/eventRoutes'));
 app.use('/api', eventRoutes);
 
 app.use('/api/user', userRoutes);
+
+
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 
 const PORT = process.env.PORT || 5000;
