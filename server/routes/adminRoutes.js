@@ -57,7 +57,7 @@ const { getPendingEvents, approveEvent, rejectEvent } = require('../controllers/
  *       400:
  *         description: Invalid request
  */
-router.post('/events', upload.single('image'), createEvent);
+router.post('/events', verifyAdmin, upload.single('image'), createEvent);
 
 /**
  * @swagger

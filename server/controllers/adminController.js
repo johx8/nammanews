@@ -28,7 +28,9 @@ exports.createEvent = async (req, res) => {
       youtubeLink,
       isAdvertisement,
       redirectUrl,
-      imageUrl,
+      imageUrl: req.file ? req.file.path : '',
+      approved: true, // Admin-created events are auto-approved
+      createdBy: req.user.userId
     });
 
     await newEvent.save();

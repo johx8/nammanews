@@ -1,6 +1,35 @@
 const express = require('express');
 const router = express.Router();
 const Event = require('../models/eventModel');
+const User = require('../models/user');
+
+router.get('events/youtube', async (req, res) => {
+  try {
+    const events = await Event.find({
+      youtubeLink: { $ne: '' }, // Not empty
+      approved: true
+    });
+
+    res.status(200).json({ success: true, events });
+  } catch (err) {
+    console.error('Error fetching YouTube events:', err);
+    res.status(500).json({ success: false, message: 'Server error' });
+  }
+});
+
+router.get('events/ads', async (req, res) => {
+  try {
+    const events = await Event.find({
+      isAdvertisement: true,
+      approved: true
+    });
+
+    res.status(200).json({ success: true, events });
+  } catch (err) {
+    console.error('Error fetching advertisement events:', err);
+    res.status(500).json({ success: false, message: 'Server error' });
+  }
+});
 
 /**
  * @swagger
@@ -96,5 +125,42 @@ router.get('/events/:id', async (req, res) => {
     res.status(500).json({ success: false, message: 'Server error', error: error.message });
   }
 });
+
+router.get('/', async (req, res) => {
+  try {
+    const { district, category } = req.query;
+
+    // Step 1: Build base filter
+    const filter = {};
+
+    if (district) filter.district = new RegExp(`^${district}$`, 'i');
+    if (category) filter.category = new RegExp(`^${category}$`, 'i');
+
+    // Step 2: Get all admin user IDs
+    const admins = await User.find({ role: 'admin' }, '_id');
+    const adminIds = admins.map(admin => admin._id);
+
+    // Step 3: Fetch events that are either:
+    // - approved: true
+    // - or created by admin
+    filter.$or = [
+      { approved: true },
+      { createdBy: { $in: adminIds } }
+    ];
+
+    // Step 4: Query
+    const events = await Event.find(filter);
+    res.status(200).json({ success: true, events });
+  } catch (err) {
+    console.error('Error fetching events:', err);
+    res.status(500).json({ success: false, message: 'Server error' });
+  }
+});
+
+
+
+
+
+
 
 module.exports = router;
