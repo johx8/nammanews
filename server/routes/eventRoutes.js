@@ -3,26 +3,38 @@ const router = express.Router();
 const Event = require('../models/eventModel');
 const User = require('../models/user');
 
-router.get('events/youtube', async (req, res) => {
-  try {
-    const events = await Event.find({
-      youtubeLink: { $ne: '' }, // Not empty
-      approved: true
-    });
+// router.get('events/youtube', async (req, res) => {
+//   try {
+//     const events = await Event.find({
+//       youtubeLink: { $ne: '' }, // Not empty
+//       approved: true
+//     });
 
-    res.status(200).json({ success: true, events });
-  } catch (err) {
-    console.error('Error fetching YouTube events:', err);
-    res.status(500).json({ success: false, message: 'Server error' });
-  }
-});
+//     res.status(200).json({ success: true, events });
+//   } catch (err) {
+//     console.error('Error fetching YouTube events:', err);
+//     res.status(500).json({ success: false, message: 'Server error' });
+//   }
+// });
 
-router.get('events/ads', async (req, res) => {
+router.get('/events/ads', async (req, res) => {
   try {
-    const events = await Event.find({
+    const { district, category } = req.query;
+
+    const filter = {
       isAdvertisement: true,
       approved: true
-    });
+    };
+
+    if (district) {
+      filter.district = { $regex: new RegExp(`^${district.trim()}$`, 'i') }; // Case-insensitive
+    }
+
+    if (category) {
+      filter.category = { $regex: new RegExp(`^${category.trim()}$`, 'i') };
+    }
+
+    const events = await Event.find(filter);
 
     res.status(200).json({ success: true, events });
   } catch (err) {
@@ -156,11 +168,5 @@ router.get('/', async (req, res) => {
     res.status(500).json({ success: false, message: 'Server error' });
   }
 });
-
-
-
-
-
-
 
 module.exports = router;

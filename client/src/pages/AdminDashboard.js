@@ -20,7 +20,7 @@ const AdminDashboard = () => {
   const districts = [
     "Bagalkote", "Ballari", "Belagavi", "Bengaluru Rural", "Bengaluru Urban", "Bidar", "Chamarajanagar", "Chikkaballapur", "Chikkamagaluru", "Chitradurga", "Dakshina Kannada", "Davanagere", "Dharwad", "Gadag", "Hassan", "Haveri", "Kalaburagi", "Kodagu", "Kolar", "Koppal", "Mandya", "Mysuru", "Raichur", "Ramanagara", "Shivamogga", "Tumakuru", "Udupi", "Uttara Kannada","Vijayanagara", "Vijayapura", "Yadgiri"];
   const categories = [
-    "Business", "Dance", "Education", "Health", "Food", "Arts", "Workshop", "Finance", "Advertisements"];
+    "Business", "Dance", "Education", "Health", "Food", "Arts", "Workshop", "Finance"];
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
       if (type === 'file'){
