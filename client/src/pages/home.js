@@ -8,7 +8,7 @@ const Home = () => {
   useEffect(() => {
     const fetchEvents = async () => {
       try {
-        const res = await axios.get('http://localhost:5000/api/admin/events');
+        const res = await axios.get('http://localhost:5000/api/events');
         const data = Array.isArray(res.data) ? res.data : res.data.events || [];
         setEvents(data);
       } catch (err) {

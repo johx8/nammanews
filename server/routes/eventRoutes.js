@@ -131,7 +131,7 @@ router.get('/', async (req, res) => {
     const { district, category } = req.query;
 
     // Step 1: Build base filter
-    const filter = {};
+    const filter = {approved: true }; // Only fetch approved events
 
     if (district) filter.district = new RegExp(`^${district}$`, 'i');
     if (category) filter.category = new RegExp(`^${category}$`, 'i');
