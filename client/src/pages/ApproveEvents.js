@@ -3,6 +3,7 @@ import axios from 'axios';
 
 const ApproveEvents = () => {
   const [pendingEvents, setPendingEvents] = useState([]);
+  const [rejectionMessages, setRejectionMessages] = useState({});
 
   const fetchPending = async () => {
     try {
@@ -24,7 +25,7 @@ const ApproveEvents = () => {
       await axios.put(`http://localhost:5000/api/admin/approve-event/${id}`, {}, {
         headers: { Authorization: `Bearer ${token}` }
       });
-      fetchPending(); // refresh
+      fetchPending(); // Refresh
     } catch (err) {
       console.error('Error approving event:', err);
     }
@@ -33,13 +34,20 @@ const ApproveEvents = () => {
   const handleReject = async (id) => {
     try {
       const token = localStorage.getItem('token');
+      const message = rejectionMessages[id] || '';
+
       await axios.delete(`http://localhost:5000/api/admin/reject-event/${id}`, {
-        headers: { Authorization: `Bearer ${token}` }
+        headers: { Authorization: `Bearer ${token}` },
+        data: { message }
       });
       fetchPending();
     } catch (err) {
       console.error('Error rejecting event:', err);
     }
+  };
+
+  const handleMessageChange = (id, value) => {
+    setRejectionMessages((prev) => ({ ...prev, [id]: value }));
   };
 
   useEffect(() => {
@@ -61,9 +69,29 @@ const ApproveEvents = () => {
               <p><strong>Time:</strong> {event.time}</p>
               <p><strong>District:</strong> {event.district}</p>
               <p><strong>Category:</strong> {event.category}</p>
+
+              {/* Rejection Message Box */}
+              <textarea
+                className="w-full p-2 border rounded mt-3"
+                placeholder="Enter rejection message (optional)"
+                value={rejectionMessages[event._id] || ''}
+                onChange={(e) => handleMessageChange(event._id, e.target.value)}
+              />
+
               <div className="flex gap-4 mt-3">
-                <button onClick={() => handleApprove(event._id)} className="bg-green-500 text-white px-4 py-1 rounded">Approve</button>
-                <button onClick={() => handleReject(event._id)} className="bg-red-500 text-white px-4 py-1 rounded">Reject</button>
+                <button
+                  onClick={() => handleApprove(event._id)}
+                  className="bg-green-500 text-white px-4 py-1 rounded"
+                >
+                  Approve
+                </button>
+
+                <button
+                  onClick={() => handleReject(event._id)}
+                  className="bg-red-500 text-white px-4 py-1 rounded"
+                >
+                  Reject
+                </button>
               </div>
             </div>
           ))}

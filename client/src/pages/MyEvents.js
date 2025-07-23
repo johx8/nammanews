@@ -45,9 +45,19 @@ const MyEvents = () => {
               <p className="text-sm text-gray-500">
                 📍 {event.district} | 📅 {new Date(event.date).toLocaleDateString()} | 🕒 {event.time}
               </p>
-              <p className={`mt-2 font-semibold ${event.approved ? 'text-green-600' : 'text-orange-600'}`}>
-                {event.approved ? 'Approved' : 'Pending Approval'}
-              </p>
+              <p className={`mt-2 font-semibold ${
+                    event.approved
+                      ? 'text-green-600'
+                      : event.rejectionMessage
+                      ? 'text-red-600'
+                      : 'text-orange-600'
+                  }`}>
+                    {event.approved
+                      ? 'Approved'
+                      : event.rejectionMessage
+                      ? `Rejected: ${event.rejectionMessage}`
+                      : 'Pending Approval'}
+                </p>
             </div>
           ))}
         </div>

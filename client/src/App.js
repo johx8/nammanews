@@ -21,6 +21,8 @@ import UserLayout from './components/UserLayout';
 import UserAddEvent from './pages/UserAddEvent';
 import MyEvents from './pages/MyEvents';
 
+import UploadVideoForm from "./pages/UploadVideoForm.js";
+
 import ApproveEvents from './pages/ApproveEvents.js';
 
 
@@ -45,6 +47,7 @@ function App() {
           <Route path="approve-events" element={<ApproveEvents />} />
           <Route path="manage-events" element={<ManageEvents />} />
           <Route path="manage-users" element={<ManageUsers />} />
+          <Route path="upload-video" element={<UploadVideoForm />} />
         </Route>
         <Route path="/event/:id" element={<EventDetails />} />
         {/* User Routes */}

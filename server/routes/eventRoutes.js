@@ -81,17 +81,30 @@ router.get('/events/ads', async (req, res) => {
  */
 router.get('/date/:date', async (req, res) => {
   try {
-    const inputDate = new Date(req.params.date);
-    const startIST = new Date(inputDate);
+    const dateParam = req.params.date;
+
+    // Parse the date from the URL param
+    const selectedDate = new Date(dateParam); // e.g., "2025-07-10"
+
+    // Convert selectedDate (which is local) into UTC midnight for IST
+    const istOffsetMs = 5.5 * 60 * 60 * 1000;
+
+    // Get IST midnight
+    const startIST = new Date(selectedDate);
     startIST.setHours(0, 0, 0, 0);
-    const endIST = new Date(inputDate);
+    const endIST = new Date(startIST);
     endIST.setHours(23, 59, 59, 999);
+
+    // Convert IST start and end to UTC (MongoDB is UTC)
+    const startUTC = new Date(startIST.getTime() - istOffsetMs);
+    const endUTC = new Date(endIST.getTime() - istOffsetMs);
 
     const events = await Event.find({
       date: {
-        $gte: startIST,
-        $lte: endIST
-      }
+        $gte: startUTC,
+        $lte: endUTC
+      },
+      approved: true
     });
 
     res.status(200).json({ events });

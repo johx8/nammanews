@@ -1,5 +1,6 @@
 const Event = require('../models/eventModel');
 
+
 exports.createEvent = async (req, res) => {
   try {
     const {
@@ -14,7 +15,7 @@ exports.createEvent = async (req, res) => {
       redirectUrl,
     } = req.body;
 
-    const imageUrl = req.file ? `/uploads/${req.file.filename}` : '';
+    const imagePaths = req.files?.map(file => `/uploads/${file.filename}`) || [];
     const istDate = new Date(date);
     istDate.setHours(0, 0, 0, 0); 
 
@@ -28,7 +29,7 @@ exports.createEvent = async (req, res) => {
       youtubeLink,
       isAdvertisement,
       redirectUrl,
-      imageUrl: req.file ? req.file.path : '',
+      imageUrl: imagePaths,
       approved: true, // Admin-created events are auto-approved
       createdBy: req.user.userId
     });
@@ -99,22 +100,31 @@ exports.deleteEvents = async (req, res) => {
 };
 
 exports.updateEvent = async (req, res) => {
-  try{
+  try {
     const { id } = req.params;
-    const updatedData = req.body;
+    const updatedData = { ...req.body };
 
-    // Optional: handle new image file if uploaded
+    // If new image uploaded
     if (req.file) {
       updatedData.imageUrl = `/uploads/${req.file.filename}`;
     }
 
+    // Ensure updatedAt is refreshed
+    updatedData.updatedAt = new Date();
+
     const updatedEvent = await Event.findByIdAndUpdate(id, updatedData, { new: true });
-    res.status(200).json({ message: 'Event updated successfully', event: updatedEvent });
-  }catch (error) {
+
+    if (!updatedEvent) {
+      return res.status(404).json({ success: false, message: 'Event not found' });
+    }
+
+    res.status(200).json({ success: true, message: 'Event updated successfully', event: updatedEvent });
+  } catch (error) {
     console.error('Error updating event:', error);
     res.status(500).json({ success: false, message: 'Failed to update event', error: error.message });
   }
 };
+
 
 exports.getAllUsers = async (req, res) => {
   try{
@@ -162,4 +172,57 @@ exports.updateUserRole = async (req, res) => {
     res.status(500).json({ message: 'Failed to update user role' });
   }
 };
+
+exports.rejectEvent = async (req, res) => {
+  try {
+    const eventId = req.params.id;
+    const { message } = req.body;
+
+    const rejectedEvent = await Event.findByIdAndUpdate(
+      eventId,
+      {
+        approved: false,
+        rejectionMessage: message || 'Rejected by admin',
+        updatedAt: new Date()
+      },
+      { new: true }
+    );
+
+    if (!rejectedEvent) {
+      return res.status(404).json({ success: false, message: 'Event not found' });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: 'Event rejected with message',
+      event: rejectedEvent
+    });
+  } catch (err) {
+    console.error('Error rejecting event:', err);
+    res.status(500).json({ success: false, message: 'Server error', error: err.message });
+  }
+};
+
+const Video = require('../models/videoModel');
+
+exports.uploadVideo = async (req, res) => {
+  try {
+    const { title, description } = req.body;
+    const videoUrl = `/videos/${req.file.filename}`;
+
+    const newVideo = new Video({
+      title,
+      description,
+      videoUrl,
+      uploadedBy: req.user.userId,
+    });
+
+    await newVideo.save();
+    res.status(201).json({ success: true, message: 'Video uploaded successfully', video: newVideo });
+  } catch (error) {
+    console.error('Video upload error:', error);
+    res.status(500).json({ success: false, message: 'Failed to upload video', error: error.message });
+  }
+};
+
 

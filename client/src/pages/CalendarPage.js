@@ -11,6 +11,7 @@ const CalendarPage = () => {
     
     try {
       const formattedDate = date.toISOString().split('T')[0]; // e.g. "2025-06-27"
+      console.log('Fetching events for:', formattedDate);
       const response = await axios.get(`http://localhost:5000/api/events/date/${formattedDate}`);
       setEvents(response.data.events || []);
       

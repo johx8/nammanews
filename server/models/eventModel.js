@@ -27,12 +27,12 @@ const eventSchema = new mongoose.Schema({
     required: true,
   },
   imageUrl: {
-    type: String,
-    default: '',
+    type: [String],
+    default: [],
   },
   youtubeLink: {
     type: String,
-    default: '',
+    default: [],
   },
   isAdvertisement: {
     type: Boolean,
@@ -46,6 +46,10 @@ const eventSchema = new mongoose.Schema({
 approved: {
   type: Boolean,
   default: false
+},
+rejectionMessage: {
+  type: String,
+  default: ''
 },
   redirectUrl: {
     type: String,

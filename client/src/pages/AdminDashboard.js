@@ -11,7 +11,7 @@ const AdminDashboard = () => {
     time: '',
     district: '',
     category: '',
-    image: null,
+    images: [],
     youtubeLink: '',
     isAdvertisement: false,
     redirectUrl: ''
@@ -22,11 +22,11 @@ const AdminDashboard = () => {
   const categories = [
     "Business", "Dance", "Education", "Health", "Food", "Arts", "Workshop", "Finance"];
   const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
+    const { name, value, type, checked, files } = e.target;
       if (type === 'file'){
         setFormData(prev => ({
           ...prev,
-          [name]: e.target.files[0]
+          [name]: [...files].slice(0, 2)
         }));
       }
       else if (type === 'checkbox') {
@@ -47,8 +47,13 @@ const AdminDashboard = () => {
 
       const data = new FormData();
       Object.entries(formData).forEach(([key, value]) => {
+        if(key !== 'images') {
           data.append(key, value);
+        }
       });
+       formData.images.forEach((file) => {
+    data.append('images', file); // use the same key for multer.array('images')
+  });
       try {
         const token = localStorage.getItem('token');
         console.log('FormData:', formData);
@@ -69,7 +74,7 @@ const AdminDashboard = () => {
             time: '',
             district: '',
             category: '',
-            image: null,
+            images: [],
             youtubeLink: '',
             isAdvertisement: false,
             redirectUrl: ''
@@ -107,7 +112,7 @@ const AdminDashboard = () => {
           {categories.map(c => <option key={c} value={c}>{c}</option>)}
         </select>
 
-        <input type="file" name="image" accept="image/*" onChange={handleChange} className="input" />
+        <input type="file" name="images" accept="image/*" onChange={handleChange} className="input" multiple/>
 
         <input type="text" name="youtubeLink" value={formData.youtubeLink} onChange={handleChange} placeholder="YouTube Video Link" className="input" />
 

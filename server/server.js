@@ -14,7 +14,9 @@ const swaggerSpec = require('./swaggerConfig');
 
 const app = express();
 
-app.use(cors());
+app.use(cors({
+  origin: 'http://localhost:3000'
+}));
 app.use(express.json());
 connectDB();
 app.use('/api/auth', require('./routes/authRoutes'));
@@ -30,7 +32,10 @@ app.use('/api', eventRoutes);
 
 app.use('/api/user', userRoutes);
 
-
+app.use(cors({
+  origin: 'http://localhost:3000',
+  credentials: true
+}));
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 
