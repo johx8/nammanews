@@ -44,5 +44,7 @@ router.delete('/reject-event/:id', verifyAdmin, rejectEvent);
 
 // 🔥 Video upload
 router.post('/videos', verifyAdmin, uploadVideo.single('video'), handleUploadVideo);
+// router.get('/videos', getAllVideos);
+
 
 module.exports = router;

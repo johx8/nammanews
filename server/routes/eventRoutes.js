@@ -43,68 +43,34 @@ router.get('/events/ads', async (req, res) => {
   }
 });
 
-/**
- * @swagger
- * tags:
- *   name: Events
- *   description: Public event retrieval endpoints
- */
 
-/**
- * @swagger
- * /date/{date}:
- *   get:
- *     summary: Get events scheduled on a specific date (IST)
- *     tags: [Events]
- *     parameters:
- *       - in: path
- *         name: date
- *         required: true
- *         schema:
- *           type: string
- *           format: date
- *         description: Date in YYYY-MM-DD format
- *     responses:
- *       200:
- *         description: Events found on the specified date
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 events:
- *                   type: array
- *                   items:
- *                     $ref: '#/components/schemas/Event'
- *       500:
- *         description: Server error
- */
 router.get('/date/:date', async (req, res) => {
   try {
-    const dateParam = req.params.date;
+    const dateParam = req.params.date; // e.g., "2025-07-10"
+    const [year, month, day] = dateParam.split('-').map(Number);
 
-    // Parse the date from the URL param
-    const selectedDate = new Date(dateParam); // e.g., "2025-07-10"
+    // Create JS Date object at midnight IST (not UTC!)
+    // Because new Date('YYYY-MM-DD') is always UTC
+    const midnightIST = new Date(Date.UTC(year, month - 1, day, 0, 0, 0));
+    // Remove UTC offset to get local IST
+    midnightIST.setHours(midnightIST.getHours() + 5, midnightIST.getMinutes() + 30);
 
-    // Convert selectedDate (which is local) into UTC midnight for IST
+    // Start and end of day in IST
+    const startIST = new Date(midnightIST);
+    const endIST = new Date(midnightIST);
+    endIST.setHours(23,59,59,999);
+
+    // Convert IST to UTC for MongoDB
     const istOffsetMs = 5.5 * 60 * 60 * 1000;
-
-    // Get IST midnight
-    const startIST = new Date(selectedDate);
-    startIST.setHours(0, 0, 0, 0);
-    const endIST = new Date(startIST);
-    endIST.setHours(23, 59, 59, 999);
-
-    // Convert IST start and end to UTC (MongoDB is UTC)
     const startUTC = new Date(startIST.getTime() - istOffsetMs);
     const endUTC = new Date(endIST.getTime() - istOffsetMs);
 
     const events = await Event.find({
       date: {
         $gte: startUTC,
-        $lte: endUTC
+        $lte: endUTC,
       },
-      approved: true
+      approved: true,
     });
 
     res.status(200).json({ events });
@@ -114,31 +80,7 @@ router.get('/date/:date', async (req, res) => {
   }
 });
 
-/**
- * @swagger
- * /events/{id}:
- *   get:
- *     summary: Get details of a specific event by ID
- *     tags: [Events]
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         schema:
- *           type: string
- *         description: The event's MongoDB ID
- *     responses:
- *       200:
- *         description: Event details fetched successfully
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Event'
- *       404:
- *         description: Event not found
- *       500:
- *         description: Server error
- */
+
 router.get('/events/:id', async (req, res) => {
   try {
     const event = await Event.findById(req.params.id);

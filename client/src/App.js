@@ -22,8 +22,10 @@ import UserAddEvent from './pages/UserAddEvent';
 import MyEvents from './pages/MyEvents';
 
 import UploadVideoForm from "./pages/UploadVideoForm.js";
+import VideoGallery from "./pages/VideoGallery.js";
 
 import ApproveEvents from './pages/ApproveEvents.js';
+
 
 
 function App() {
@@ -35,7 +37,7 @@ function App() {
         <Route path="/districts" element={<div>Districts</div>} />
         <Route path="/events" element={<div><LatestEvents/></div>} />
         <Route path="/stories" element={<div>Stories</div>} />
-        <Route path="/videos" element={<div>Videos</div>} />
+        <Route path="/videos" element={<div><VideoGallery/></div>} />
         <Route path="/calendar" element={<div><CalendarPage /></div>} />
         <Route path="/categories" element={<div>Categories</div>} />
         <Route path="/signup" element={<div><SignUp /></div>} />
@@ -48,6 +50,7 @@ function App() {
           <Route path="manage-events" element={<ManageEvents />} />
           <Route path="manage-users" element={<ManageUsers />} />
           <Route path="upload-video" element={<UploadVideoForm />} />
+          {/* <Route path="video" element={<VideoGallery />} /> */}
         </Route>
         <Route path="/event/:id" element={<EventDetails />} />
         {/* User Routes */}

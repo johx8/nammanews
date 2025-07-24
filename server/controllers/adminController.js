@@ -207,22 +207,45 @@ const Video = require('../models/videoModel');
 
 exports.uploadVideo = async (req, res) => {
   try {
-    const { title, description } = req.body;
-    const videoUrl = `/videos/${req.file.filename}`;
+    const { title, description, youtubeLink } = req.body;
+    let videoUrl = null;
+
+    if (req.file) {
+      videoUrl = `/videos/${req.file.filename}`;
+    }
+
+    if (!videoUrl && !youtubeLink) {
+      return res.status(400).json({
+        success: false,
+        message: 'Either a video file or YouTube link must be provided',
+      });
+    }
 
     const newVideo = new Video({
       title,
       description,
       videoUrl,
+      youtubeLink,
       uploadedBy: req.user.userId,
     });
 
     await newVideo.save();
-    res.status(201).json({ success: true, message: 'Video uploaded successfully', video: newVideo });
+    res.status(201).json({
+      success: true,
+      message: 'Video uploaded successfully',
+      video: newVideo,
+    });
   } catch (error) {
     console.error('Video upload error:', error);
-    res.status(500).json({ success: false, message: 'Failed to upload video', error: error.message });
+    res.status(500).json({
+      success: false,
+      message: 'Failed to upload video',
+      error: error.message,
+    });
   }
 };
+
+
+
 
 
