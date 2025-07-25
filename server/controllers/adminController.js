@@ -10,12 +10,13 @@ exports.createEvent = async (req, res) => {
       category,
       date,
       time,
-      youtubeLink,
-      isAdvertisement,
-      redirectUrl,
+      organizedBy,
+      contact,
+      address,
+      maxAttendees,
     } = req.body;
 
-    const imagePaths = req.files?.map(file => `/uploads/${file.filename}`) || [];
+    const imagePath = req.file ? `/uploads/${req.file.filename}` : '';
     const istDate = new Date(date);
     istDate.setHours(0, 0, 0, 0); 
 
@@ -26,10 +27,11 @@ exports.createEvent = async (req, res) => {
       category,
       date: istDate,
       time,
-      youtubeLink,
-      isAdvertisement,
-      redirectUrl,
-      imageUrl: imagePaths,
+      organizedBy,
+      contact,
+      address,
+      maxAttendees,
+      imageUrl: imagePath,
       approved: true, // Admin-created events are auto-approved
       createdBy: req.user.userId
     });
@@ -44,21 +46,35 @@ exports.createEvent = async (req, res) => {
 };
 
 const User = require('../models/user');
+const Advertisement = require('../models/advertisementModel');
+
+
 exports.getAdminStats = async (req, res) => {
-  try{
-    const userCount = await User.countDocuments();
-    const eventCount = await Event.countDocuments();
+  try {
+    const [userCount, eventCount, adCount, storyCount] = await Promise.all([
+      User.countDocuments(),
+      Event.countDocuments(),
+      Advertisement.countDocuments(),
+      Story.countDocuments(),
+    ]);
+
     const currentDate = new Date();
 
     res.status(200).json({
       success: true,
       userCount,
       eventCount,
-      currentDate: currentDate.toISOString('en-IN', { timeZone: 'Asia/Kolkata' }),
+      adCount,
+      storyCount,
+       currentDate: currentDate.toISOString('en-IN', { timeZone: 'Asia/Kolkata' }),
     });
   } catch (error) {
     console.error('Error fetching admin stats:', error);
-    res.status(500).json({ success: false, message: 'Failed to fetch admin stats', error: error.message });
+    res.status(500).json({
+      success: false,
+      message: 'Failed to fetch admin stats',
+      error: error.message,
+    });
   }
 };
 
@@ -77,6 +93,24 @@ exports.getEventCount = async (req, res) => {
     res.status(200).json({ count });
   } catch (error) {
     res.status(500).json({ message: 'Failed to count events' });
+  }
+};
+
+exports.getAdvertisementCount = async (req, res) => {
+  try { 
+    const count = await Advertisement.countDocuments();
+    res.status(200).json({ count });
+  } catch (error) {
+    res.status(500).json({ message: 'Failed to count events' });
+  }
+};
+
+exports.getStoryCount = async (req, res) => {
+  try{
+    const count = await Story.countDocuments();
+    res.status(200).json({ count });
+  } catch (error) {
+    res.status(500).json({ message: 'Failed to count stories' });
   }
 };
 

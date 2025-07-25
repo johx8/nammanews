@@ -22,6 +22,7 @@ const AdminSidebar = () => {
           <NavLink to="/admin/manage-users" className={navItemClass}>Manage Users</NavLink>
           <NavLink to="/admin/upload-video" className={navItemClass}>Upload Video</NavLink>
           <NavLink to="/admin/add-story" className={navItemClass}>Add story</NavLink>
+          <NavLink to="/admin/add-advertisement" className={navItemClass}>Add Advertisement</NavLink>
         </nav>
       </div>
 

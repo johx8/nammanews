@@ -13,6 +13,7 @@ const userRoutes = require('./routes/userRoutes');
 const swaggerUi = require('swagger-ui-express');
 const swaggerSpec = require('./swaggerConfig');
 const videoRoutes = require('./routes/videoRoutes');
+const advertisementRoutes = require('./routes/advertisementRoutes');
 
 const app = express();
 
@@ -32,12 +33,14 @@ app.use('/api/events', eventRoutes);
 app.use('/api/user', userRoutes);
 app.use('/api/videos', videoRoutes);
 app.use('/api/stories', require('./routes/storyRoutes'));
+app.use('/api/advertisements', advertisementRoutes);
 
 
 // Static file serving
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use('/videos', express.static(path.join(__dirname, 'videos')));
 app.use('/stories', express.static(path.join(__dirname, 'stories')));
+app.use('/ads', express.static(path.join(__dirname, 'ads')));
 
 
 // Swagger

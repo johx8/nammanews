@@ -24,10 +24,11 @@ const {
   getPendingEvents,
   approveEvent,
   rejectEvent,
+  getEventAttendees,
 } = require('../controllers/adminEventController');
 
 // Event routes
-router.post('/events', verifyAdmin, upload.array('images', 2), createEvent);
+router.post('/events', verifyAdmin, upload.single('image'), createEvent);
 router.get('/events', getAllEvents);
 router.delete('/events/:id', deleteEvents);
 router.put('/events/:id', updateEvent);
@@ -44,6 +45,7 @@ router.put('/users/:id/role', updateUserRole);
 router.get('/pending-events', verifyAdmin, getPendingEvents);
 router.put('/approve-event/:id', verifyAdmin, approveEvent);
 router.delete('/reject-event/:id', verifyAdmin, rejectEvent);
+router.get('/events/:id/attendees', verifyAdmin, getEventAttendees);
 
 // 🔥 Video upload
 router.post('/videos', verifyAdmin, uploadVideo.single('video'), handleUploadVideo);

@@ -7,6 +7,7 @@ import Login from "./pages/login.js";
 import Profile from "./pages/profile.js";
 import Stories from "./pages/Stories.js";
 import StoryDetail from "./pages/StoryDetail.js";
+import EventRegister from './pages/EventRegister';
 
 // import UserRoutes from "./components/UserRoutes.js";
 import AdminDashboard from "./pages/AdminDashboard.js";
@@ -24,12 +25,15 @@ import UserLayout from './components/UserLayout';
 import UserAddEvent from './pages/UserAddEvent';
 import MyEvents from './pages/MyEvents';
 
+
 import UploadVideoForm from "./pages/UploadVideoForm.js";
 import VideoGallery from "./pages/VideoGallery.js";
 
 import UploadStoryForm from "./pages/UploadStoryForm.js";
 
 import ApproveEvents from './pages/ApproveEvents.js';
+
+import UploadAdvertisementForm from './pages/UploadAdvertisementForm.js';
 
 
 
@@ -56,8 +60,10 @@ function App() {
           <Route path="manage-users" element={<ManageUsers />} />
           <Route path="upload-video" element={<UploadVideoForm />} />
           <Route path="add-story" element={<UploadStoryForm />} />
+          <Route path ="add-advertisement" element={<UploadAdvertisementForm />} />
         </Route>
         <Route path="/event/:id" element={<EventDetails />} />
+        <Route path="/event/:id/register" element={<EventRegister />} />
         <Route path="/stories/:id" element={<StoryDetail />} />
         {/* User Routes */}
           <Route path="/user" element={<UserLayout />}>

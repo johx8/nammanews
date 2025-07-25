@@ -2,46 +2,32 @@ const express = require('express');
 const router = express.Router();
 const Event = require('../models/eventModel');
 const User = require('../models/user');
+const { registerForEvent } = require('../controllers/adminEventController');
 
-// router.get('events/youtube', async (req, res) => {
-//   try {
-//     const events = await Event.find({
-//       youtubeLink: { $ne: '' }, // Not empty
-//       approved: true
-//     });
 
-//     res.status(200).json({ success: true, events });
-//   } catch (err) {
-//     console.error('Error fetching YouTube events:', err);
-//     res.status(500).json({ success: false, message: 'Server error' });
-//   }
-// });
+router.post('/:eventId/register', async (req, res) => {
+  const { eventId } = req.params;
+  const { name, email } = req.body;
 
-router.get('/events/ads', async (req, res) => {
   try {
-    const { district, category } = req.query;
+    const event = await Event.findById(eventId);
+    if (!event) return res.status(404).json({ message: 'Event not found' });
 
-    const filter = {
-      isAdvertisement: true,
-      approved: true
-    };
-
-    if (district) {
-      filter.district = { $regex: new RegExp(`^${district.trim()}$`, 'i') }; // Case-insensitive
+    // Check if slots are limited and already full
+    if (event.maxAttendees && event.registeredUsers.length >= event.maxAttendees) {
+      return res.status(400).json({ message: 'Registration full' });
     }
 
-    if (category) {
-      filter.category = { $regex: new RegExp(`^${category.trim()}$`, 'i') };
-    }
+    event.registeredUsers.push({ name, email });
+    await event.save();
 
-    const events = await Event.find(filter);
-
-    res.status(200).json({ success: true, events });
-  } catch (err) {
-    console.error('Error fetching advertisement events:', err);
-    res.status(500).json({ success: false, message: 'Server error' });
+    res.status(200).json({ message: 'Registered successfully' });
+  } catch (error) {
+    res.status(500).json({ message: 'Registration failed', error });
   }
 });
+
+
 
 
 router.get('/date/:date', async (req, res) => {
@@ -123,5 +109,7 @@ router.get('/', async (req, res) => {
     res.status(500).json({ success: false, message: 'Server error' });
   }
 });
+
+router.post('/:id/register', registerForEvent);
 
 module.exports = router;

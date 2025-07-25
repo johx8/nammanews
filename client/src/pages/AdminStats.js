@@ -5,6 +5,8 @@ const AdminStats = () => {
   const [stats, setStats] = useState({
     users: 0,
     events: 0,
+    advertisements: 0,
+    stories: 0,
     dateTime: new Date().toLocaleString(),
   });
 
@@ -15,6 +17,8 @@ const AdminStats = () => {
       setStats({
         users: (res.data.userCount-1),
         events: res.data.eventCount,
+        advertisements: res.data.adCount || 0, // Assuming adCount is returned from the API
+        stories: res.data.storyCount || 0, // Assuming storyCount is returned from the
         dateTime: new Date(res.data.currentDate).toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })
       });
       } catch (error) {
@@ -45,6 +49,14 @@ const AdminStats = () => {
         <div className="bg-purple-500 text-white p-6 rounded shadow">
           <h2 className="text-lg font-bold">Total Users</h2>
           <p className="text-2xl">{stats.users}</p>
+        </div>
+        <div className="bg-blue-500 text-white p-6 rounded shadow">
+          <h2 className="text-lg font-bold">Total Story</h2>
+          <p className="text-2xl">{stats.stories}</p>
+        </div>
+        <div className="bg-purple-500 text-white p-6 rounded shadow">
+          <h2 className="text-lg font-bold">Total Advertisement</h2>
+          <p className="text-2xl">{stats.advertisements}</p>
         </div>
         <div className="bg-green-500 text-white p-6 rounded shadow">
           <h2 className="text-lg font-bold">Current Time</h2>

@@ -1,60 +1,24 @@
 const mongoose = require('mongoose');
 
 const eventSchema = new mongoose.Schema({
-  title: {
-    type: String,
-    required: true,
-  },
-  description: {
-    type: String,
-    required: true,
-  },
-  district: {
-    type: String,
-    required: true,
-  },
-  category: {
-    type: String,
-    // enum: ['education', 'food', 'business', 'dance', 'arts', 'workshop', 'health', 'finance', 'advertisements'],
-    required: true,
-  },
-  date: {
-    type: Date,
-    required: true,
-  },
-  time: {
-    type: String,
-    required: true,
-  },
-  imageUrl: {
-    type: [String],
-    default: [],
-  },
-  youtubeLink: {
-    type: String,
-    default: [],
-  },
-  isAdvertisement: {
-    type: Boolean,
-    default: false,
-  },
-  createdBy: {
-  type: mongoose.Schema.Types.ObjectId,
-  ref: 'User',
-  required: true
-},
-approved: {
-  type: Boolean,
-  default: false
-},
-rejectionMessage: {
-  type: String,
-  default: ''
-},
-  redirectUrl: {
-    type: String,
-    default: '',
-  }
+  title: { type: String, required: true },
+  description: { type: String, required: true },
+  date: { type: Date, required: true },
+  time: { type: String, required: true },
+  organizedBy: { type: String, required: true },
+  imageUrl: { type: String },
+  contact: { type: String, required: true },
+  address: { type: String, required: true },
+  district: { type: String, required: true },
+  category: { type: String, required: true },
+  maxAttendees: { type: Number }, // If not set, treated as free-for-all
+  registeredUsers: [
+    {
+      name: String,
+      email: String,
+      registeredAt: { type: Date, default: Date.now }
+    }
+  ]
 }, { timestamps: true });
 
 module.exports = mongoose.model('Event', eventSchema);
