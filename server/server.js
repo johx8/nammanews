@@ -31,10 +31,14 @@ app.use('/api/admin', require('./routes/adminRoutes'));
 app.use('/api/events', eventRoutes);
 app.use('/api/user', userRoutes);
 app.use('/api/videos', videoRoutes);
+app.use('/api/stories', require('./routes/storyRoutes'));
+
 
 // Static file serving
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use('/videos', express.static(path.join(__dirname, 'videos')));
+app.use('/stories', express.static(path.join(__dirname, 'stories')));
+
 
 // Swagger
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));

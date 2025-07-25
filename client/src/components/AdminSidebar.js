@@ -21,6 +21,7 @@ const AdminSidebar = () => {
           <NavLink to="/admin/manage-events" className={navItemClass}>Manage Events</NavLink>
           <NavLink to="/admin/manage-users" className={navItemClass}>Manage Users</NavLink>
           <NavLink to="/admin/upload-video" className={navItemClass}>Upload Video</NavLink>
+          <NavLink to="/admin/add-story" className={navItemClass}>Add story</NavLink>
         </nav>
       </div>
 
@@ -41,6 +42,7 @@ const AdminSidebar = () => {
             <NavLink to="/admin/manage-events" className={navItemClass}>Manage Events</NavLink>
             <NavLink to="/admin/manage-users" className={navItemClass}>Manage Users</NavLink>
             <NavLink to="/admin/upload-video" className={navItemClass}>Upload Video</NavLink>
+            <NavLink to="/admin/add-story" className={navItemClass}>Add story</NavLink>
           </nav>
         </div>
       )}

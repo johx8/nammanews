@@ -5,6 +5,9 @@ import Home from "./pages/home.js";
 import LatestEvents from "./pages/latestEvents.js";
 import Login from "./pages/login.js";
 import Profile from "./pages/profile.js";
+import Stories from "./pages/Stories.js";
+import StoryDetail from "./pages/StoryDetail.js";
+
 // import UserRoutes from "./components/UserRoutes.js";
 import AdminDashboard from "./pages/AdminDashboard.js";
 // import AdminRoutes from "./components/AdminRoutes.js";
@@ -24,6 +27,8 @@ import MyEvents from './pages/MyEvents';
 import UploadVideoForm from "./pages/UploadVideoForm.js";
 import VideoGallery from "./pages/VideoGallery.js";
 
+import UploadStoryForm from "./pages/UploadStoryForm.js";
+
 import ApproveEvents from './pages/ApproveEvents.js';
 
 
@@ -36,7 +41,7 @@ function App() {
         <Route path="/" element={<div><Home/></div>} />
         <Route path="/districts" element={<div>Districts</div>} />
         <Route path="/events" element={<div><LatestEvents/></div>} />
-        <Route path="/stories" element={<div>Stories</div>} />
+        <Route path="/stories" element={<div><Stories/></div>} />
         <Route path="/videos" element={<div><VideoGallery/></div>} />
         <Route path="/calendar" element={<div><CalendarPage /></div>} />
         <Route path="/categories" element={<div>Categories</div>} />
@@ -50,9 +55,10 @@ function App() {
           <Route path="manage-events" element={<ManageEvents />} />
           <Route path="manage-users" element={<ManageUsers />} />
           <Route path="upload-video" element={<UploadVideoForm />} />
-          {/* <Route path="video" element={<VideoGallery />} /> */}
+          <Route path="add-story" element={<UploadStoryForm />} />
         </Route>
         <Route path="/event/:id" element={<EventDetails />} />
+        <Route path="/stories/:id" element={<StoryDetail />} />
         {/* User Routes */}
           <Route path="/user" element={<UserLayout />}>
             <Route path="profile" element={<Profile />} />

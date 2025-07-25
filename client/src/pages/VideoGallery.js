@@ -1,6 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
+// Utility function to extract YouTube video ID from various URL forms
+function getYouTubeVideoID(url) {
+  if (!url) return '';
+  // Handles regular, short, and embed URLs
+  const regExp = /^.*(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|v\/))([^#&?]*).*/;
+  const match = url.match(regExp);
+  return match && match[1] ? match[1] : '';
+}
+
 const VideoGallery = () => {
   const [videos, setVideos] = useState([]);
 
@@ -16,11 +25,6 @@ const VideoGallery = () => {
       });
   }, []);
 
-  const getYoutubeThumbnail = (link) => {
-    const videoId = link.split('v=')[1]?.split('&')[0];
-    return `https://img.youtube.com/vi/${videoId}/0.jpg`;
-  };
-
   return (
     <div className="p-6 grid grid-cols-1 md:grid-cols-3 gap-6">
       {videos.length === 0 ? (
@@ -31,17 +35,24 @@ const VideoGallery = () => {
             <h3 className="text-lg font-semibold">{video.title}</h3>
             <p className="text-sm text-gray-600 mb-2">{video.description}</p>
 
+            {/* Local uploaded video */}
             {video.videoUrl ? (
               <video controls className="w-full">
                 <source src={`http://localhost:5000${video.videoUrl}`} type="video/mp4" />
                 Your browser does not support the video tag.
               </video>
             ) : video.youtubeLink ? (
+              // YouTube thumbnail with link
               <a href={video.youtubeLink} target="_blank" rel="noreferrer">
                 <img
-                  src={getYoutubeThumbnail(video.youtubeLink)}
+                  src={
+                    getYouTubeVideoID(video.youtubeLink)
+                      ? `https://img.youtube.com/vi/${getYouTubeVideoID(video.youtubeLink)}/hqdefault.jpg`
+                      : ""
+                  }
                   alt="YouTube thumbnail"
                   className="w-full rounded"
+                  style={{ minHeight: "200px", background: "#ececec" }}
                 />
               </a>
             ) : (

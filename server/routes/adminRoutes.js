@@ -4,6 +4,8 @@ const router = express.Router();
 const upload = require('../middleware/upload');
 const { uploadVideo } = require('../middleware/videoUploads'); // ← fix here
 const { verifyAdmin } = require('../middleware/authMiddleware');
+const { storyUpload } = require('../middleware/storyUploads');
+
 
 const {
   createEvent,
@@ -14,6 +16,7 @@ const {
   getAllUsers,
   deleteUser,
   updateUserRole,
+  createStory,
   uploadVideo: handleUploadVideo,
 } = require('../controllers/adminController');
 
@@ -45,6 +48,9 @@ router.delete('/reject-event/:id', verifyAdmin, rejectEvent);
 // 🔥 Video upload
 router.post('/videos', verifyAdmin, uploadVideo.single('video'), handleUploadVideo);
 // router.get('/videos', getAllVideos);
+
+// Story upload
+router.post('/stories',verifyAdmin, storyUpload.single('image'), createStory);
 
 
 module.exports = router;

@@ -246,6 +246,30 @@ exports.uploadVideo = async (req, res) => {
 };
 
 
+const Story = require('../models/storyModel');
+
+exports.createStory = async (req, res) => {
+  try {
+    const { title, description, date, time, district, category, youtubeLink } = req.body;
+
+    const story = new Story({
+      title,
+      description,
+      imageUrl: req.file ? `/stories/${req.file.filename}` : null,
+      youtubeLink,
+      date,
+      time,
+      district,
+      category
+    });
+
+    await story.save();
+    res.status(201).json({ message: 'Story created successfully', story });
+  } catch (error) {
+    console.error('Error creating story:', error);
+    res.status(500).json({ message: 'Failed to create story' });
+  }
+};
 
 
 
